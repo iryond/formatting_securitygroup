@@ -15,14 +15,17 @@ if __name__ == "__main__":
 #    print json.dumps(jsonData,indent = 2)
 
     for attr in jsonData["SecurityGroups"]:
+        SecId = attr["GroupId"]
         GroupName = attr["GroupName"]
         for IpPerm in attr["IpPermissions"]:
             ToPort =  IpPerm.get("ToPort")
             FromPort =  IpPerm.get("FromPort")
             IpProtocol =  IpPerm.get("IpProtocol")
             for Range in IpPerm["IpRanges"]:
-                IpRanges = Range["CidrIp"]
-                print str(GroupName)+","+str(ToPort)+","+str(FromPort)+","+str(IpProtocol)+","+str(IpRanges)
-
+                srcIpRanges = Range["CidrIp"]
+                print str(SecId)+","+str(GroupName)+","+str(ToPort)+","+str(FromPort)+","+str(IpProtocol)+","+str(srcIpRanges)
+            for SecGroup in IpPerm["UserIdGroupPairs"]:
+                srcSecID = SecGroup["GroupId"]
+                print str(SecId)+","+str(GroupName)+","+str(ToPort)+","+str(FromPort)+","+str(IpProtocol)+","+str(srcSecID)
 
     f.close()
